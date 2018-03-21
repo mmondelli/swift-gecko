@@ -17,8 +17,15 @@ Workflow invocation
 
 Run the following command in the directory where the input files are placed:
 
-$ swift -config swift.conf allvsall.swift -l=100 -s=65 -wl=12 -fl=1
+```
+swift -config swift.conf allvsall.swift -l=100 -s=65 -wl=12 -fl=1
+```
 
+Note that the binaries/applications needed to execute the workflow are already in the /bin directory of this repository. You can export them to the system PATH for Swift to recognize them:
+
+```
+export PATH=<path to /bin>:$PATH
+```
 
 
 
