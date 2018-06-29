@@ -6,25 +6,25 @@ string wl = arg("wl", "12");
 string fixedl = arg("fl", "1");
 
 file fasta[] <filesys_mapper;suffix=".fasta">;
-file fastarc[] <simple_mapper;prefix="itermediate_files/g", suffix=".fastarc", padding=1>;
-file wordsUnsort[] <simple_mapper;prefix="itermediate_files/g", suffix=".wu", padding=1>;
-file wordsSorted[] <simple_mapper;prefix="itermediate_files/g", suffix=".ws", padding=1>;
-file wordsUnsortrc[] <simple_mapper;prefix="itermediate_files/g", suffix="-rc.wu", padding=1>;
-file wordsSortedrc[] <simple_mapper;prefix="itermediate_files/g", suffix="-rc.ws", padding=1>;
+file fastarc[] <simple_mapper;prefix="intermediate_files/g", suffix=".fastarc", padding=1>;
+file wordsUnsort[] <simple_mapper;prefix="intermediate_files/g", suffix=".wu", padding=1>;
+file wordsSorted[] <simple_mapper;prefix="intermediate_files/g", suffix=".ws", padding=1>;
+file wordsUnsortrc[] <simple_mapper;prefix="intermediate_files/g", suffix="-rc.wu", padding=1>;
+file wordsSortedrc[] <simple_mapper;prefix="intermediate_files/g", suffix="-rc.ws", padding=1>;
 
-file d2hP[] <simple_mapper;prefix="itermediate_files/g", suffix=".d2hP", padding=1>;
-file d2hW[] <simple_mapper;prefix="itermediate_files/g", suffix=".d2hW", padding=1>;
+file d2hP[] <simple_mapper;prefix="intermediate_files/g", suffix=".d2hP", padding=1>;
+file d2hW[] <simple_mapper;prefix="intermediate_files/g", suffix=".d2hW", padding=1>;
 
-file d2hPrc[] <simple_mapper;prefix="itermediate_files/g", suffix="-rc.d2hP", padding=1>;
-file d2hWrc[] <simple_mapper;prefix="itermediate_files/g", suffix="-rc.d2hW", padding=1>;
+file d2hPrc[] <simple_mapper;prefix="intermediate_files/g", suffix="-rc.d2hP", padding=1>;
+file d2hWrc[] <simple_mapper;prefix="intermediate_files/g", suffix="-rc.d2hW", padding=1>;
 
-file hits[][] <simple_mapper;prefix="itermediate_files/g", suffix=".hits", padding=1>;
-file hitSorted[][] <simple_mapper;prefix="itermediate_files/g", suffix=".s", padding=1>;
-file hitFiltered[][] <simple_mapper;prefix="itermediate_files/g", suffix=".f", padding=1>;
+file hits[][] <simple_mapper;prefix="intermediate_files/g", suffix=".hits", padding=1>;
+file hitSorted[][] <simple_mapper;prefix="intermediate_files/g", suffix=".s", padding=1>;
+file hitFiltered[][] <simple_mapper;prefix="intermediate_files/g", suffix=".f", padding=1>;
 
-file frags[][] <simple_mapper;prefix="itermediate_files/g", suffix=".frags", padding=1>;
-file inf[][] <simple_mapper;prefix="itermediate_files/g", suffix=".frags.INF", padding=1>;
-file mat[][] <simple_mapper;prefix="itermediate_files/g", suffix=".frags.MAT", padding=1>;
+file frags[][] <simple_mapper;prefix="intermediate_files/g", suffix=".frags", padding=1>;
+file inf[][] <simple_mapper;prefix="intermediate_files/g", suffix=".frags.INF", padding=1>;
+file mat[][] <simple_mapper;prefix="intermediate_files/g", suffix=".frags.MAT", padding=1>;
 
 file fragsF[][] <simple_mapper;prefix="results/g", suffix=".fragsF", padding=1>;
 file infF[][] <simple_mapper;prefix="results/g", suffix=".fragsF.INF", padding=1>;
@@ -97,9 +97,9 @@ foreach f,i in fasta
 	wordsUnsortrc[i] = words(fastarc[i]);
 	wordsSortedrc[i] = sortWords(wordsUnsortrc[i]);
 
-	(d2hP[i], d2hW[i]) = w2hd(wordsSorted[i], strcat("itermediate_files/g", i));
+	(d2hP[i], d2hW[i]) = w2hd(wordsSorted[i], strcat("intermediate_files/g", i));
 	
-	(d2hPrc[i], d2hWrc[i]) = w2hd(wordsSortedrc[i], strcat("itermediate_files/g", i, "-rc"));
+	(d2hPrc[i], d2hWrc[i]) = w2hd(wordsSortedrc[i], strcat("intermediate_files/g", i, "-rc"));
 
 	tracef("Fasta [%d]: %s", i, filename(f));
 }
@@ -109,12 +109,12 @@ foreach f, i in fasta
 	foreach g, j in fasta
 	{
 		if(i < j) {
-		  hits[i][j] = hits(strcat("itermediate_files/g", i), strcat("itermediate_files/g", j), d2hW[i], d2hW[j], d2hP[i], d2hP[j], wl);
+		  hits[i][j] = hits(strcat("intermediate_files/g", i), strcat("intermediate_files/g", j), d2hW[i], d2hW[j], d2hP[i], d2hP[j], wl);
 		  hitSorted[i][j] = sortHits(hits[i][j]);
 		  hitFiltered[i][j] = filterHits(hitSorted[i][j], wl);
 		  (frags[i][j], inf[i][j], mat[i][j]) = fragHits(fasta[i], fasta[j], hitFiltered[i][j], length, similarity, wl, fixedl, "f");
 	
-		  hits[j][i] = hits(strcat("itermediate_files/g", i), strcat("itermediate_files/g", j, "-rc"), d2hWrc[j], d2hW[i], d2hPrc[j], d2hP[i], wl);
+		  hits[j][i] = hits(strcat("intermediate_files/g", i), strcat("intermediate_files/sg", j, "-rc"), d2hWrc[j], d2hW[i], d2hPrc[j], d2hP[i], wl);
 		  hitSorted[j][i] = sortHits(hits[j][i]);
 		  hitFiltered[j][i] = filterHits(hitSorted[j][i], wl);
 		  (frags[j][i], inf[j][i], mat[j][i]) = fragHits(fasta[i], fastarc[j], hitFiltered[j][i], length, similarity, wl, fixedl, "r");
