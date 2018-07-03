@@ -114,7 +114,7 @@ foreach f, i in fasta
 		  hitFiltered[i][j] = filterHits(hitSorted[i][j], wl);
 		  (frags[i][j], inf[i][j], mat[i][j]) = fragHits(fasta[i], fasta[j], hitFiltered[i][j], length, similarity, wl, fixedl, "f");
 	
-		  hits[j][i] = hits(strcat("intermediate_files/g", i), strcat("intermediate_files/sg", j, "-rc"), d2hWrc[j], d2hW[i], d2hPrc[j], d2hP[i], wl);
+		  hits[j][i] = hits(strcat("intermediate_files/g", i), strcat("intermediate_files/g", j, "-rc"), d2hWrc[j], d2hW[i], d2hPrc[j], d2hP[i], wl);
 		  hitSorted[j][i] = sortHits(hits[j][i]);
 		  hitFiltered[j][i] = filterHits(hitSorted[j][i], wl);
 		  (frags[j][i], inf[j][i], mat[j][i]) = fragHits(fasta[i], fastarc[j], hitFiltered[j][i], length, similarity, wl, fixedl, "r");
